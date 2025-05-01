@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Number guessing game</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      
+      .form input[type="number"] {
+        width: 200px;
+      }
+
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Number guessing game</h1>
+
+    <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+
+    <div class="form">
+      <label for="guessField">Enter a guess: </label>
+      <input type="number" min="1" max="100" required id="guessField" class="guessField">
+      <input type="submit" value="Submit guess" class="guessSubmit">
+    </div>
+
+    <div class="resultParas">
+      <p class="guesses"></p>
+      <p class="lastResult"></p>
+      <p class="lowOrHi"></p>
+    </div>
+
+    <script>
+        // 変数と定数を宣言
+        // const:定数(再代入不可)、let:変数(再代入可能)
+
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+        // それぞれHTMLの結果の段落への参照を格納するため
+        // 後でゲームを再開するときに3つをすべて選択してリセットするために使用する
+        const guesses = document.querySelector(".guesses");
+        const lastResult = document.querySelector(".lastResult");
+        const lowOrHi = document.querySelector(".lowOrHi");
+
+        // テキスト入力フォームおよび送信ボタンへの参照が保持
+        const guessSubmit = document.querySelector(".guessSubmit");
+        const guessField = document.querySelector(".guessField");
+
+        let guessCount = 1;
+        let resetButton;
+
+        // (command + option + i : 開発者ツールを開く)
+        // function checkGuess() {
+        //     alert("I am a placeholder");
+        // }
+        function checkGuess() {
+            const userGuess = Number(guessField.value);
+            if (guessCount === 1) {
+                guesses.textContent = "Previous guesses:";
+            }
+            guesses.textContent = `${guesses.textContent} ${userGuess}`;
+            
+            // もし予想がランダムな数字と等しければ
+            if (userGuess === randomNumber) {
+                lastResult.textContent = "Congratulations! You got it right!";
+                lastResult.style.backgroundColor = "green";
+                lowOrHi.textContent = "";
+                setGameOver();
+            // もし予想回数が10回目なら(最後のターン)
+            } else if (guessCount === 10) {
+                lastResult.textContent = "!!!GAME OVER!!!";
+                lowOrHi.textContent = "";
+                setGameOver();
+            } else {
+                lastResult.textContent = "Wrong!";
+                lastResult.style.backgroundColor = "red";
+                if (userGuess < randomNumber) {
+                lowOrHi.textContent = "Last guess was too low!";
+                } else if (userGuess > randomNumber) {
+                lowOrHi.textContent = "Last guess was too high!";
+                }
+            }
+
+            guessCount++;
+            guessField.value = "";
+            guessField.focus();
+        }
+
+        // 入力のボタンが押されたときに関数を呼び出す
+        guessSubmit.addEventListener("click", checkGuess);
+
+        // ゲームをリセットする関数
+        function setGameOver() {
+            // 入力フォームに入力できないようにする
+            guessField.disabled = true;
+            guessSubmit.disabled = true;
+            // 新しいbutton要素を生成
+            resetButton = document.createElement("button");
+            resetButton.textContent = "Start new game";
+            document.body.append(resetButton);
+            resetButton.addEventListener("click", resetGame);
+        }
+
+        // ゲームが終わった時の関数
+        function resetGame() {
+            guessCount = 1;
+
+            const resetParas = document.querySelectorAll(".resultParas p");
+            for (const resetPara of resetParas) {
+                resetPara.textContent = "";
+            }
+
+            resetButton.parentNode.removeChild(resetButton);
+
+            guessField.disabled = false;
+            guessSubmit.disabled = false;
+            guessField.value = "";
+            guessField.focus();
+
+            lastResult.style.backgroundColor = "white";
+
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+        }
+
+
+    </script>
+  </body>
+</html>
