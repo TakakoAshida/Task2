@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Apply JavaScript example</title>
+  </head>
+  <body>
+    <button>Click me</button>
+
+    <script>
+        // JavaScriptをここに書く
+        function createParagraph() {
+            const para = document.createElement("p");
+            para.textContent = "ボタンが押されました";
+            document.body.appendChild(para);
+        }
+    
+        const buttons = document.querySelectorAll("button");
+    
+        for (const button of buttons) {
+            button.addEventListener("click", createParagraph);
+        }
+      </script>
+  </body>
+</html>
+
+<!-- Webページはページに表示されている順番で読み込まれて実行されるのでJavaScriptを文章の最後に配置する -->

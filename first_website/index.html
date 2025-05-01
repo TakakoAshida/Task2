@@ -24,10 +24,13 @@
     <button type="button">Player 1: Chris</button>
 
     <script>
+        // ボタンを選択
       const button = document.querySelector("button");
 
+    //   ボタンをクリックしたときのイベントリスナーを追加
       button.addEventListener("click", updateName);
 
+    //   ボタンがクリックされたときに実行される
       function updateName() {
         const name = prompt("Enter a new name");
         button.textContent = `Player 1: ${name}`;
